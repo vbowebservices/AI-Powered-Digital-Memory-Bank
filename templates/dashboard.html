@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>My Memories</h2>
+    <a href="{{ url_for('add_memory') }}" class="btn btn-success mb-3">Add Memory</a>
+    {% if memories %}
+        <div class="row">
+            {% for memory in memories %}
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    {% if memory.type == 'text' %}
+                        <div class="card-body">
+                            <p>{{ memory.content }}</p>
+                        </div>
+                    {% elif memory.type == 'image' %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ memory.filepath) }}" class="card-img-top" alt="Image Memory">
+                    {% elif memory.type == 'video' %}
+                        <video class="w-100" controls>
+                            <source src="{{ url_for('static', filename='uploads/' ~ memory.filepath) }}" type="video/mp4">
+                        </video>
+                    {% endif %}
+                    <div class="card-footer">
+                        <small class="text-muted">{{ memory.date_created.strftime('%Y-%m-%d') }}</small>
+                        <button class="btn btn-sm btn-outline-primary float-end">Share</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No memories yet. <a href="{{ url_for('add_memory') }}">Add one now</a>.</p>
+    {% endif %}
+</div>
+{% endblock %}
