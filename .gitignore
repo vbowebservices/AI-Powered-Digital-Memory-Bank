@@ -1,0 +1,23 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.venv/
+
+# Flask instance folder (contains database, configs)
+instance/
+
+# Static uploads (user files)
+static/uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Allow empty folders by keeping .gitkeep
+!static/uploads/.gitkeep
+!instance/.gitkeep

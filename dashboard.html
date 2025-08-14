@@ -1,0 +1,58 @@
+Includes search, filter, delete
+{% extends 'base.html' %}
+{% block content %}
+<h2>Your Memories</h2>
+<form method="GET" class="row g-2 mb-3">
+  <div class="col-md-3">
+    <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request.args.get('search','') }}">
+  </div>
+  <div class="col-md-2">
+    <select name="type" class="form-select">
+      <option value="">All Types</option>
+      <option value="text">Text</option>
+      <option value="image">Image</option>
+      <option value="video">Video</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <input type="date" name="start_date" class="form-control" value="{{ request.args.get('start_date','') }}">
+  </div>
+  <div class="col-md-2">
+    <input type="date" name="end_date" class="form-control" value="{{ request.args.get('end_date','') }}">
+  </div>
+  <div class="col-md-2">
+    <button type="submit" class="btn btn-primary">Filter</button>
+  </div>
+</form>
+
+<a href="{{ url_for('add_memory') }}" class="btn btn-success mb-3">Add Memory</a>
+
+<div class="row">
+{% for m in memories %}
+  <div class="col-md-4">
+    <div class="card mb-3">
+      {% if m.type == 'text' %}
+        <div class="card-body"><p>{{ m.content }}</p></div>
+      {% elif m.type == 'image' %}
+        <img src="{{ url_for('static', filename='uploads/' ~ m.filepath) }}" class="card-img-top">
+      {% elif m.type == 'video' %}
+        <video class="w-100" controls>
+          <source src="{{ url_for('static', filename='uploads/' ~ m.filepath) }}" type="video/mp4">
+        </video>
+      {% endif %}
+      <div class="card-footer d-flex justify-content-between">
+        <small>{{ m.date_created.strftime('%Y-%m-%d') }}</small>
+        <div>
+          <a href="{{ url_for('view_memory', id=m.id) }}" class="btn btn-sm btn-info">View</a>
+          <form method="POST" action="{{ url_for('delete_memory', id=m.id) }}" style="display:inline;">
+            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete memory?')">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% else %}
+  <p>No memories found.</p>
+{% endfor %}
+</div>
+{% endblock %}

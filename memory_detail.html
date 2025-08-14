@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Memory Detail</h2>
+{% if memory.type == 'text' %}
+  <p>{{ memory.content }}</p>
+{% elif memory.type == 'image' %}
+  <img src="{{ url_for('static', filename='uploads/' ~ memory.filepath) }}" class="img-fluid">
+{% elif memory.type == 'video' %}
+  <video controls class="w-100">
+    <source src="{{ url_for('static', filename='uploads/' ~ memory.filepath) }}">
+  </video>
+{% endif %}
+<p><small>Date: {{ memory.date_created.strftime('%Y-%m-%d') }}</small></p>
+<a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back</a>
+{% endblock %}
